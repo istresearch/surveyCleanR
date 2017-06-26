@@ -34,7 +34,7 @@ get_strata_df <- function(df, strata_cols) {
       }
       
       #get rows with no NA values
-      strata_subset <- strata_subset[complete_cases(strata_subset),]
+      strata_subset <- strata_subset[complete.cases(strata_subset),]
       
       #get just unique rows
       strata_subset <- unique(strata_subset)
