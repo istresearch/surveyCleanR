@@ -4,8 +4,10 @@ This is an R package for basic survey data cleanup. It makes it easier to run re
 
 ## Installation
 
+```
 require('devtools')
 install_github('istresearch/surveyCleanR')
+```
 
 ## Usage
 
