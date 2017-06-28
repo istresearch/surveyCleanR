@@ -34,9 +34,9 @@ vectorize_df <- function(df, strata_cols=NA) {
   
   else {
     
+    df_vect <- NA
+    
     if (length(strata_cols) == 1) {
-      
-      df_vect <- NA
       
       for (stratum in strata_df) {
         
@@ -57,7 +57,7 @@ vectorize_df <- function(df, strata_cols=NA) {
         
         else {
           
-          df_vect <- plyr::rbind.fill(df_vect,df_subset_vect)
+          df_vect <- rbind(df_vect,df_subset_vect)
           
         }
         
@@ -67,32 +67,50 @@ vectorize_df <- function(df, strata_cols=NA) {
     
     else {
       
+      df_vect <- NA
+      
       for (subset in 1:nrow(strata_df)) {
         
-        df_subset <- df[which(df[,strata_cols] == strata_df[subset,]),]
+        subset_row <- strata_df[subset,]
+        #print(subset_row)
+        
+        df_subset <- df[sapply(df[,strata_cols],function(x) { 
+            
+              if (x == subset_row) {
+                return(TRUE)
+              }
+              else {
+                return(FALSE)
+              }
+           }),]
+        print(dim(df_subset))
         df_subset_vect = data.frame(index=rep(0,nrow(df_subset)))
         
-        for (i in 1:ncol(df_subset)) {
+        if (nrow(df_subset) > 0) {
           
-          df_subset_vect = vectorize_col(df_subset_vect,df_subset[,i],colnames(df_subset)[i])
+          for (i in 1:ncol(df_subset)) {
+            
+            df_subset_vect = vectorize_col(df_subset_vect,df_subset[,i],colnames(df_subset)[i])
+            
+          }
           
-        }
-        
-        if (is.na(df_vect)) {
+          if (is.na(df_vect)) {
+            
+            df_vect <- df_subset_vect
+            
+          }
           
-          df_vect <- df_subset_vect
-          
-        }
-        
-        else {
-          
-          df_vect <- plyr::rbind.fill(df_vect,df_subset_vect)
+          else {
+            
+            df_vect <- rbind(df_vect,df_subset_vect)
+            
+          }
           
         }
         
       }
       
-      df_vect <- vectorize_df(df_vect)
+      #df_vect <- vectorize_df(df_vect)
       
     }
     

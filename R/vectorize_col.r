@@ -17,15 +17,20 @@ vectorize_col <- function(df, col_to_vect, colname) {
     
     mean_col <- mean(df[,colname],na.rm = TRUE)
     
-    df[,colname] <- sapply(1:nrow(df), function(x) {
-      if (is.na(df[,colname][x])) {
-        return(mean_col)
-      }
-      else {
-        return(df[,colname][x])
-      }
+    if (!is.na(df)) {
+      df[,colname] <- sapply(1:nrow(df), function(x) {
+        if (is.na(df[,colname][x])) {
+          return(mean_col)
+        }
+        else {
+          return(df[,colname][x])
+        }
       
-    })
+      })
+    }
+    else {
+      return(NULL)
+    }
   }
   
   else if (is.character(col_to_vect)) {

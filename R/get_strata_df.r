@@ -24,11 +24,11 @@ get_strata_df <- function(df, strata_cols) {
   else{
     
     #replace empty strings with NAs
-    strata_subset <- sapply(1:nrow(strata_subset), function(x) {
+    sapply(1:nrow(strata_subset), function(x) {
       
       for (col in 1:ncol(strata_subset)) {
         
-        if (as.character(strata_subset[x,col]) == '') {
+        if (trimws(as.character(strata_subset[x,col]),which = "both") == '') {
           strata_subset[x,col] <- NA
         }
       }
@@ -42,8 +42,7 @@ get_strata_df <- function(df, strata_cols) {
     
     #get just unique rows
     strata_subset <- unique(strata_subset)
-    
-    return(strata_subset)
+    print(strata_subset)
     
     return(strata_subset)
     
